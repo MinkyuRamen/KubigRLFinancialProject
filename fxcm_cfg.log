@@ -1,0 +1,18 @@
+|ERROR|2023-03-26 14:46:34,466|Server reports an error: {'executed': False, 'error': 'Invalid from/to parameneters.'}.
+|ERROR|2023-03-26 14:46:34,467|URL: https://api-demo.fxcm.com:443/candles/1/m1?num=10&from=1593561600&to=1596153600
+|ERROR|2023-03-26 14:46:34,467|Headers: {'User-Agent': 'request', 'Accept-Encoding': 'gzip, deflate', 'Accept': 'application/json', 'Connection': 'keep-alive', 'Authorization': 'Bearer sPfwTQ0gVcC2iCePAAEef06cf75171f21810213cf96465dd197819ff9461', 'Content-Type': 'application/x-www-form-urlencoded'}
+|ERROR|2023-03-26 14:46:34,467|Params: {'num': 10, 'from': 1593561600, 'to': 1596153600}
+|ERROR|2023-03-26 14:46:34,467|Bearer token: Bearer sPfwTQ0gVcC2iCePAAEef06cf75171f21810213cf96465dd197819ff9461
+|ERROR|2023-03-26 14:46:34,467|Connection status: established
+|ERROR|2023-03-26 14:46:34,467|Socket session id: sPfwTQ0gVcC2iCePAAEe
+|ERROR|2023-03-26 14:46:34,467|Can not parse server answer to json object: {"response":{"executed":false,"error":"Invalid from/to parameneters."},"instrument_id":"1","period_id":"m1","candles":[]}.
+|ERROR|2023-03-26 14:51:13,061|Server reports an error: {'executed': False, 'error': 'Cannot subscribe to symbol: BITCOIN'}.
+|ERROR|2023-03-26 14:51:13,062|URL: https://api-demo.fxcm.com:443/subscribe
+|ERROR|2023-03-26 14:51:13,062|Headers: {'User-Agent': 'request', 'Accept-Encoding': 'gzip, deflate', 'Accept': 'application/json', 'Connection': 'keep-alive', 'Authorization': 'Bearer sPfwTQ0gVcC2iCePAAEef06cf75171f21810213cf96465dd197819ff9461', 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': '13'}
+|ERROR|2023-03-26 14:51:13,062|Params: {'pairs': 'BITCOIN'}
+|ERROR|2023-03-26 14:51:13,062|Bearer token: Bearer sPfwTQ0gVcC2iCePAAEef06cf75171f21810213cf96465dd197819ff9461
+|ERROR|2023-03-26 14:51:13,062|Connection status: established
+|ERROR|2023-03-26 14:51:13,062|Socket session id: sPfwTQ0gVcC2iCePAAEe
+|ERROR|2023-03-26 14:51:13,062|Can not parse server answer to json object: {"response":{"executed":false,"error":"Cannot subscribe to symbol: BITCOIN"},"pairs":[]}.
+|ERROR|2023-03-26 14:52:05,341|Socket returns unknown error.
+|ERROR|2023-03-26 15:03:18,213|Socket returns unknown error.
