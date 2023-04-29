@@ -10,4 +10,4 @@ BackTesting 결과를 평가지표를 통해 평가
 ----
 2023-04-29
 RSI 수정 + 볼린저밴드&RSI&MACD position 개발
->> 아직 position이 불안정해서 보완필요해보임
+아직 position이 불안정해서 보완필요함
