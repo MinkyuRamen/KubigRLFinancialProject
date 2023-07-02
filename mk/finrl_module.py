@@ -20,11 +20,12 @@ sys.path.append("/content/drive/MyDrive/kubig_financial/finrl")
 # ## install finrl library
 # !apt-get update -y -qq && apt-get install -y -qq cmake libopenmpi-dev python3-dev zlib1g-dev libgl1-mesa-glx swig
 
-def finrl_main(using='a2c', TRADE_END_DATE='2023-05-05', FORCAST_SIZE=30, epochs=200, tolerance=0.0001, hmax=10000, initial_amount=1000000):
+def finrl_main(tickers, using, epochs, FORCAST_SIZE, tolerance, hmax, initial_amount):
+
 
   import sys
   sys.path.append("/content/drive/MyDrive/kubig_financial/finrl")
-  
+
   import pandas as pd
   import numpy as np
   import matplotlib
@@ -32,7 +33,6 @@ def finrl_main(using='a2c', TRADE_END_DATE='2023-05-05', FORCAST_SIZE=30, epochs
   # matplotlib.use('Agg')
   import datetime
 
-#   %matplotlib inline
   from finrl.meta.preprocessor.yahoodownloader import YahooDownloader
   from finrl.meta.preprocessor.preprocessors import FeatureEngineer, data_split
   from finrl.meta.env_stock_trading.env_stocktrading import StockTradingEnv
@@ -68,12 +68,16 @@ def finrl_main(using='a2c', TRADE_END_DATE='2023-05-05', FORCAST_SIZE=30, epochs
 #   !ls
   import dlinear_module
 
+  import datetime
+  TRADE_END_DATE = datetime.date.today().strftime("%Y-%m-%d")
+
   ##### parameter inside #####
-  TRAIN_START_DATE = '2010-01-01'
+  TRAIN_START_DATE = '2009-01-01'
   TRAIN_END_DATE = '2021-10-01'
   TRADE_START_DATE = '2021-10-01'
 
-  tickers = ['XLB','XLE','XLF','XLI','XLK','XLP','XLU','XLV','XLY']
+  # TRADE_END_DATE = '2023-07-01'
+  tickers = tickers
 
   ## agent setting
   if_using_a2c = False
@@ -99,13 +103,14 @@ def finrl_main(using='a2c', TRADE_END_DATE='2023-05-05', FORCAST_SIZE=30, epochs
     using_stratgy = if_using_sac
 
   ############################
-
+  print('start_date : ',TRAIN_START_DATE,'end_date : ',TRADE_END_DATE,'tickers : ',tickers)
   ## data loading
   df = YahooDownloader(start_date = TRAIN_START_DATE, end_date = TRADE_END_DATE, ticker_list = tickers).fetch_data()
+  df_yahoo = df.copy()
   df.sort_values(['date','tic'],ignore_index=True)
 
   ## load dlinear prediction
-  prediction_5,prediction_10,prediction_30 = dlinear_module.main(FORCAST_SIZE, epochs, tolerance, TRADE_END_DATE)
+  prediction_5,prediction_10,prediction_30 = dlinear_module.main(FORCAST_SIZE, epochs, tolerance, TRADE_END_DATE, df=df_yahoo, tickers=tickers)
 
   print(INDICATORS)
   ## feature Engineering

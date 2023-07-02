@@ -147,19 +147,19 @@ class Windowed_Dataset(Dataset):
 
 class dlinear_main():
 
-  def __init__(self, TRADE_END_DATE = '2023-05-05'):
+  def __init__(self, TRADE_END_DATE='2023-05-05', tickers=[]):
     self.TRAIN_START_DATE = '2009-01-01'
     self.TRAIN_END_DATE = '2021-10-01'
     self.TRADE_START_DATE = '2021-10-01'
     self.PREDICTION_START_DATE = '2010-01-01'
 
     self.TRADE_END_DATE = TRADE_END_DATE
-    self.tickers = ['XLB','XLE','XLF','XLI','XLK','XLP','XLU','XLV','XLY']
+    self.tickers = tickers
 
 
-  def preprocessing(self, model, FORCAST_SIZE = 30):
+  def preprocessing(self, df, FORCAST_SIZE=30):
+    self.df = df
     self.FORCAST_SIZE = FORCAST_SIZE
-    self.model = model
 
     TRAIN_START_DATE = self.TRAIN_START_DATE
     TRAIN_END_DATE = self.TRAIN_END_DATE
@@ -167,17 +167,15 @@ class dlinear_main():
     TRADE_END_DATE = self.TRADE_END_DATE
     PREDICTION_START_DATE = self.PREDICTION_START_DATE
     tickers = self.tickers
-
-    df = YahooDownloader(start_date = TRAIN_START_DATE,
-                     end_date = TRADE_END_DATE,
-                     ticker_list = tickers).fetch_data()
+    df = self.df
+    FORCAST_SIZE = self.FORCAST_SIZE
 
     data_for_pred = pd.DataFrame(index = range(len(df[df.tic==tickers[0]])), columns = tickers)
     data_for_pred['date'] = df.date.unique()
     for tic in tickers:
         data_for_pred[tic] = df[df.tic==tic].close.values
 
-    prediction_start_index = data_for_pred[data_for_pred['date'] >= PREDICTION_START_DATE].index[0] 
+    prediction_start_index = data_for_pred[data_for_pred['date'] >= PREDICTION_START_DATE].index[0]
     test_start_index = data_for_pred[data_for_pred['date'] >= TRADE_START_DATE].index[0]
 
     print('prediction_start_index',prediction_start_index)
@@ -283,8 +281,10 @@ class dlinear_main():
     print('Test Loss: {:.6f}'.format(loss.item()))
     return predictions
 
-def main(FORCAST_SIZE, epochs, tolerance, TRADE_END_DATE):
-  tickers = ['XLB','XLE','XLF','XLI','XLK','XLP','XLU','XLV','XLY']
+def main(FORCAST_SIZE, epochs, tolerance, TRADE_END_DATE, df, tickers):
+  
+  tickers = tickers
+  df = df
 
   FORCAST_SIZE = FORCAST_SIZE
   epochs = epochs
@@ -293,19 +293,20 @@ def main(FORCAST_SIZE, epochs, tolerance, TRADE_END_DATE):
   device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-  dlinear = dlinear_main(TRADE_END_DATE)
-  test_dataset, WINDOW_SIZE, data_for_pred = dlinear.preprocessing(FORCAST_SIZE)
+  dlinear = dlinear_main(TRADE_END_DATE, tickers)
+  test_dataset, WINDOW_SIZE, data_for_pred = dlinear.preprocessing(df, FORCAST_SIZE)
 
-  ## 학습된 model를 load할땐 필요없다.
-  # model_train = dlinear.train(model, epochs, tolerance)
-  # model = LTSF_DLinear(WINDOW_SIZE, FORCAST_SIZE, 25, True, len(tickers))
-  # model = model.to(device)
-
-  ## 학습된 model 불러오는 code
-  PATH = '/content/drive/MyDrive/kubig_financial/finrl/result'
-  model = LTSF_DLinear(WINDOW_SIZE, FORCAST_SIZE, 25, True, len(tickers))
-  model = model.to(device)
-  model.load_state_dict(torch.load(PATH))
+  if tickers != ['XLB','XLE','XLF','XLI','XLK','XLP','XLU','XLV','XLY']:
+    # 학습된 model를 load할땐 필요없다.
+    model_train = dlinear.train(model, epochs, tolerance)
+    model = LTSF_DLinear(WINDOW_SIZE, FORCAST_SIZE, 25, True, len(tickers))
+    model = model.to(device)
+  else: # default tickers
+    ## 학습된 model 불러오는 code
+    PATH = '/content/drive/MyDrive/kubig_financial/finrl/result'
+    model = LTSF_DLinear(WINDOW_SIZE, FORCAST_SIZE, 25, True, len(tickers))
+    model = model.to(device)
+    model.load_state_dict(torch.load(PATH))
 
   test_predictions = dlinear.test(model, flag=0)
   test_predictions = torch.cat(test_predictions, dim=0)
@@ -327,10 +328,6 @@ def main(FORCAST_SIZE, epochs, tolerance, TRADE_END_DATE):
   prediction_5 = pd.DataFrame(all_predictions[:,4,:], columns=tickers, index = (data_for_pred.index[WINDOW_SIZE:-FORCAST_SIZE]))
   prediction_10 = pd.DataFrame(all_predictions[:,9,:], columns=tickers, index = (data_for_pred.index[WINDOW_SIZE:-FORCAST_SIZE]))
   prediction_30 = pd.DataFrame(all_predictions[:,29,:], columns=tickers, index = (data_for_pred.index[WINDOW_SIZE:-FORCAST_SIZE]))
-  
+  print('end')
   # return all_predictions
   return prediction_5, prediction_10, prediction_30
-
-
-if __name__=="__main__":
-  prediction_5, prediction_10, prediction_30 = main(FORCAST_SIZE = 30, epochs = 200, tolerance = 0.0001, TRADE_END_DATE = '2023-05-05')
