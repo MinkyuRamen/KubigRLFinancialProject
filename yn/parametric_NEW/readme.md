@@ -44,7 +44,8 @@ Comparison with NDX
 # Agent_3 : Off_Policy Ensemble (DDPG, SAC, TD3)
 
 
-picture goes here!
+![image](https://github.com/MinkyuRamen/KubigFinancialProject/assets/125656149/3948f8aa-46b0-413f-a864-ae1ee5dd0587)
+
 
 \
 
@@ -52,7 +53,8 @@ picture goes here!
 
 Comparison with DJI
 
-picture goes here!
+![image](https://github.com/MinkyuRamen/KubigFinancialProject/assets/125656149/a59061a8-1b7e-45de-8577-4bff4b37aabb)
+
 
 \
 
@@ -60,5 +62,6 @@ picture goes here!
 
 Comparison with NDX
 
-picture goes here!
+![image](https://github.com/MinkyuRamen/KubigFinancialProject/assets/125656149/f14225c5-cd3c-4212-9850-5cad00d6f624)
+
 
