@@ -32,7 +32,9 @@ def finrl_main(tickers, using, epochs, FORCAST_SIZE, tolerance, hmax, initial_am
   import matplotlib.pyplot as plt
   # matplotlib.use('Agg')
   import datetime
+  from stable_baselines3 import A2C
 
+  # %matplotlib inline
   from finrl.meta.preprocessor.yahoodownloader import YahooDownloader
   from finrl.meta.preprocessor.preprocessors import FeatureEngineer, data_split
   from finrl.meta.env_stock_trading.env_stocktrading import StockTradingEnv
@@ -42,7 +44,7 @@ def finrl_main(tickers, using, epochs, FORCAST_SIZE, tolerance, hmax, initial_am
 
   from finrl.plot import backtest_stats, backtest_plot, get_daily_return, get_baseline
   from pprint import pprint
-
+  
   import itertools
 
   from finrl import config
@@ -64,8 +66,8 @@ def finrl_main(tickers, using, epochs, FORCAST_SIZE, tolerance, hmax, initial_am
   )
   check_and_make_directories([DATA_SAVE_DIR, TRAINED_MODEL_DIR, TENSORBOARD_LOG_DIR, RESULTS_DIR])
 
-#   %cd /content/drive/MyDrive/kubig_financial
-#   !ls
+  # %cd /content/drive/MyDrive/kubig_financial
+  # !ls
   import dlinear_module
 
   import datetime
@@ -205,11 +207,14 @@ def finrl_main(tickers, using, epochs, FORCAST_SIZE, tolerance, hmax, initial_am
     # Set new logger
     model_using.set_logger(new_logger_using)
 
-
-  ## training
-  trained_using = agent.train_model(model=model_using,
-                              tb_log_name=f'{using}',
-                              total_timesteps=50000) if using_stratgy else None
+  if tickers != ['XLB','XLE','XLF','XLI','XLK','XLP','XLU','XLV','XLY']:
+    ## training
+    trained_using = agent.train_model(model=model_using,
+                                tb_log_name=f'{using}',
+                                total_timesteps=50000) if using_stratgy else None
+  else: # ticker가 default값이면
+    path = '/content/drive/MyDrive/kubig_financial/result/trained_a2c_model.pt'
+    trained_using = A2C.load(path)
 
   data_risk_indicator = processed_full[(processed_full.date<TRAIN_END_DATE) & (processed_full.date>=TRAIN_START_DATE)]
   insample_risk_indicator = data_risk_indicator.drop_duplicates(subset=['date'])
@@ -255,7 +260,7 @@ def finrl_main(tickers, using, epochs, FORCAST_SIZE, tolerance, hmax, initial_am
   result.to_csv(f"/content/drive/MyDrive/kubig_financial/result/result_{using}.csv")
 
   ## visualize
-#   %matplotlib inline
+  # %matplotlib inline
   plt.rcParams["figure.figsize"] = (15,5)
   plt.figure();
   result.plot();
