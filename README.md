@@ -1,6 +1,7 @@
 # 강화학습과 시계열 예측을 이용한 알고리즘 트레이딩
 [WEB 발신] (광고) 쿠빅홀딩스 > 오늘 무슨일이?!? 3일 무료방 입장
 ## 16기 이영노,박민규,엄기영  17기 조성윤
+[Uploading KUBIG_Algorithmic trading using reinforcement Learning and time series prediction.pptx…]()
 
 <<구현 목표>>
 
