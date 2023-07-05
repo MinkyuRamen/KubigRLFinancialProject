@@ -2,8 +2,10 @@
 [WEB 발신] (광고) 쿠빅홀딩스 > 오늘 무슨일이?!? 3일 무료방 입장
 ## 16기 이영노,박민규,엄기영  17기 조성윤
 
-**발표 ppt**
-[Uploading KUBIG_Algorithmic trading using reinforcement Learning and time series prediction.pptx…]()
+**발표 자료(pdf)**
+
+[KUBIG_Algorithmic trading using reinforcement Learning and time series prediction.pdf](https://github.com/MinkyuRamen/KubigFinancialProject/files/11960370/KUBIG_Algorithmic.trading.using.reinforcement.Learning.and.time.series.prediction.pdf)
+
 
 <<구현 목표>>
 
